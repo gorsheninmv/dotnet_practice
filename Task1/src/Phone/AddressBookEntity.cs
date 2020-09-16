@@ -7,6 +7,8 @@ namespace Task1.Phone
   /// </summary>
   internal class AddressBookEntity
   {
+    #region Поля и свойства
+
     /// <summary>
     /// Имя абонента.
     /// </summary>
@@ -27,12 +29,21 @@ namespace Task1.Phone
     /// </summary>
     public string PhoneNumber { get; set; }
 
+    #endregion
+
+    #region Конструкторы
+
     /// <summary>
     /// Конструктор.
     /// </summary>
-    public AddressBookEntity()
+    public AddressBookEntity(string firstName, string lastName, string surname, string phoneNumber)
     {
-      FirstName = LastName = Surname = PhoneNumber = String.Empty;
+      this.FirstName = firstName;
+      this.LastName = lastName;
+      this.Surname = surname;
+      this.PhoneNumber = phoneNumber;
     }
+
+    #endregion
   }
 }

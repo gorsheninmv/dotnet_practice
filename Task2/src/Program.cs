@@ -17,42 +17,29 @@ namespace Task2
     /// <param name="args">Аргументы командной строки.</param>
     static void Main(string[] args)
     {
-      var dllName = "System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-      Assembly winFormsAssembly = Assembly.Load(dllName);
-      Type[] winFormsTypes = winFormsAssembly.GetTypes();
+      var assemblyName = "System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+      Assembly winFormsAssembly = Assembly.Load(assemblyName);
 
-      IEnumerable<MethodInfo> methodsMetadataToWrite = winFormsTypes.GetMethodsMetadata(BindingFlags.Public |
-       BindingFlags.Instance | BindingFlags.DeclaredOnly);
+      var typeName = "System.Windows.Forms.MessageBox";
+      Type? messageBox = winFormsAssembly.GetType(typeName);
 
-      string fullPathToFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "MethodInfos.txt");
-      WriteMethodsMetadataToFile(fullPathToFile, methodsMetadataToWrite);
+      if (messageBox != null)
+      {
+        IEnumerable<MethodInfo> messageBoxMethodsToWrite = messageBox.GetMethods(BindingFlags.Public |
+         BindingFlags.Instance);
 
-      MethodInfo? showMethodMetaData = winFormsTypes.GetMethodsMetadata(BindingFlags.Public | BindingFlags.Static)
-        .TryFindShowMessageBoxMethod();
+        string fullPathToFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "MethodsInfo.txt");
+        WriteMethodsMetadataToFile(fullPathToFile, messageBoxMethodsToWrite);
 
-      showMethodMetaData?.Invoke(null, new []{"Some Info"});
-    }
+        MethodInfo? messageBoxShowMethod = messageBox.GetMethod("Show", BindingFlags.Static | BindingFlags.Public,
+          Type.DefaultBinder, new[] { typeof(string) }, new ParameterModifier[0]);
 
-    /// <summary>
-    /// Возвращает метаданные методов.
-    /// </summary>
-    /// <param name="source">Типы, в которых производится поиск.</param>
-    /// <param name="flags">Флаги, которым должен соответствовать искомый метод.</param>
-    /// <returns>Метаданные методов, удовлетворяющих <param name="flags"/>.</returns>
-    private static IEnumerable<MethodInfo> GetMethodsMetadata(this IEnumerable<Type> source, BindingFlags flags)
-    {
-      return source.SelectMany(type => type.GetMethods(flags));
-    }
-
-    /// <summary>
-    /// Выполняет поиск метаданных метода в типе MessageBox с именем Show с одним аргументом.
-    /// </summary>
-    /// <param name="methodInfos">Метаданные методов, в которых производится поиск.</param>
-    /// <returns>Метаданные найденного метода. Если метод не найден - то null.</returns>
-    private static MethodInfo? TryFindShowMessageBoxMethod(this IEnumerable<MethodInfo> methodInfos)
-    {
-      return methodInfos.FirstOrDefault(methodInfo => methodInfo.DeclaringType?.Name == "MessageBox" &&
-       methodInfo.Name == "Show" && methodInfo.GetParameters().Length == 1);
+        messageBoxShowMethod?.Invoke(null, new[] { "Some Info" });
+      }
+      else
+      {
+        throw new Exception($"Type '{typeName}' not found.");
+      }
     }
 
     /// <summary>

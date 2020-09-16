@@ -10,9 +10,9 @@ namespace Task3
   /// <summary>
   /// Инкапсулирует и абстрагирует работу с Excel-файлами.
   /// </summary>
-  internal sealed class ExcelProvider : IDisposable
+  internal sealed class ExcelProvider<T> : IDisposable
   {
-    #region Поля и свойства.
+    #region Поля и свойства
 
     /// <summary>
     /// Полное имя excel-файла.
@@ -40,20 +40,25 @@ namespace Task3
     private readonly Excel.Range range;
 
     /// <summary>
+    /// Парсер.
+    /// </summary>
+    private readonly IParserStrategy<T> parser;
+
+    /// <summary>
     /// Был ли вызван метод Dispose на объекте.
     /// </summary>
     private bool disposed;
 
     #endregion
 
-    #region Методы.
+    #region Методы
 
     /// <summary>
     /// Читает данные из excel-файла.
     /// </summary>
     /// <returns>Итератор по строкам.</returns>
     /// <remarks>Ячейка excel-файла отделяется точкой запятой в выходной строке.</remarks>>
-    public IEnumerable<string> Read()
+    public IEnumerable<T> Read()
     {
       this.ThrowIfDisposed();
 
@@ -64,25 +69,22 @@ namespace Task3
 
       int rowCount = range.Rows.Count;
       int colCount = range.Columns.Count;
-      var sb = new StringBuilder();
+      var contents = new string[colCount];
 
       for (var row = 1; row <= rowCount; ++row)
       {
-        sb.Clear();
-
         for (var col = 1; col <= colCount; ++col)
         {
           if (range.Cells[row, col] is Excel.Range cell)
           {
-            sb.Append(cell.Value2);
-            sb.Append(';');
+            contents[col - 1] = cell.Value2.ToString();
           }
         }
 
-        if (sb.Length > 0 && sb[sb.Length - 1] == ';')
-          sb.Remove(sb.Length - 1, 1);
+        bool parsed = this.parser.TryParse(contents, out T result);
 
-        yield return sb.ToString();
+        if (parsed)
+          yield return result;
       }
     }
 
@@ -92,12 +94,12 @@ namespace Task3
     private void ThrowIfDisposed()
     {
       if (this.disposed)
-        throw new ObjectDisposedException(nameof(ExcelProvider));
+        throw new ObjectDisposedException(nameof(ExcelProvider<T>));
     }
 
     #endregion
 
-    #region IDisposable.
+    #region IDisposable
 
     public void Dispose()
     {
@@ -131,17 +133,18 @@ namespace Task3
 
     #endregion
 
-    #region Конструкторы.
+    #region Конструкторы
 
     /// <summary>
     /// Конструктор.
     /// </summary>
-    /// <param name="fullPath">Полное имя excel-файла</param>
-    public ExcelProvider(string fullPath)
+    /// <param name="fullPath">Полное имя excel-файла.</param>
+    public ExcelProvider(string fullPath, IParserStrategy<T> parser)
     {
       this.fullPath = fullPath;
+      this.parser = parser;
 
-      this.excelApp = new Excel.ApplicationClass();
+      this.excelApp = new Excel.Application();
       this.workbook = excelApp.Workbooks.Open(this.fullPath);
       this.worksheet = (Excel.Worksheet)workbook.Sheets[1];
       this.range = worksheet.UsedRange;

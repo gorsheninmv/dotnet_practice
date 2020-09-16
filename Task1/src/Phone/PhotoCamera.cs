@@ -7,22 +7,30 @@ namespace Task1.Phone
   /// </summary>
   internal sealed class PhotoCamera
   {
+    #region Методы
+
     /// <summary>
     /// Сделать фотографию.
     /// </summary>
     public void Shot()
     {
-      this.OnPhotoTaken(new byte[0]);      
+      this.OnPhotoTaken(new byte[0]);
     }
-    
+
+    #endregion
+
+    #region Cобытия
+
     /// <summary>
     /// Событие, сигнализирующее о том, что сделана новая фотография.
     /// </summary>
-    public EventHandler<PhotoTakenEventArgs>? PhotoTaken;
+    public event EventHandler<PhotoTakenEventArgs>? PhotoTaken;
 
     private void OnPhotoTaken(byte[] rawPhoto)
     {
       this.PhotoTaken?.Invoke(this, new PhotoTakenEventArgs(rawPhoto));
     }
+
+    #endregion
   }
 }

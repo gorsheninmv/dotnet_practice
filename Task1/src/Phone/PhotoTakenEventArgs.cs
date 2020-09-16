@@ -7,10 +7,16 @@ namespace Task1.Phone
   /// </summary>
   internal sealed class PhotoTakenEventArgs : EventArgs
   {
+    #region Поля и свойства
+
     /// <summary>
     /// Сырые данные с фотокамеры.
     /// </summary>
     public byte[] RawPhoto { get; }
+
+    #endregion
+
+    #region Конструкторы
 
     /// <summary>
     /// Конструктор аргумента события.
@@ -20,5 +26,7 @@ namespace Task1.Phone
     {
       this.RawPhoto = rawPhoto;
     }
+
+    #endregion
   }
 }

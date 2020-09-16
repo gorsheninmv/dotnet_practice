@@ -8,7 +8,7 @@ namespace Task1.Phone
   /// </summary>
   internal class MobilePhone
   {
-    #region Поля и свойства.
+    #region Поля и свойства
 
     /// <summary>
     /// IMEI телефона.
@@ -27,7 +27,7 @@ namespace Task1.Phone
 
     #endregion
 
-    #region Методы.
+    #region Методы
 
     /// <summary>
     /// Подключиться к сети.
@@ -45,8 +45,7 @@ namespace Task1.Phone
     public bool Call(string phoneNumber)
     {
       Console.WriteLine($"Call by using {phoneNumber} number");
-      this.Call();
-      return true;
+      return this.Call();
     }
 
     /// <summary>
@@ -57,8 +56,7 @@ namespace Task1.Phone
     public bool Call(AddressBookEntity entity)
     {
       Console.WriteLine($"Call to '{entity.FirstName} {entity.Surname} {entity.LastName}'");
-      this.Call();
-      return true;
+      return this.Call(entity.PhoneNumber);
     }
 
     /// <summary>
@@ -72,19 +70,21 @@ namespace Task1.Phone
     /// <summary>
     /// Реализует общую функциональность звонка.
     /// </summary>
-    private void Call()
+    /// <returns>Удалось ли дозвониться.</returns>
+    private bool Call()
     {
       Console.WriteLine("Call accepted");
+      return true;
     }
 
     #endregion
 
-    #region Конструкторы.
+    #region Конструкторы
 
     /// <summary>
     /// Конструктор.
     /// </summary>
-    /// <param name="imei">IMEI</param>
+    /// <param name="imei">IMEI.</param>
     public MobilePhone(string imei)
     {
       this.Imei = imei;

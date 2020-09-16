@@ -10,16 +10,7 @@ namespace Task3
   /// </summary>
   internal static class Program
   {
-    #region Константы.
-
-    /// <summary>
-    /// Код ошибки при выходе программы.
-    /// </summary>
-    private const int ErrorExitCode = 1;
-
-    #endregion
-
-    #region Поля и свойства.
+    #region Поля и свойства
 
     /// <summary>
     /// Полное имя файла с входными данными.
@@ -33,7 +24,7 @@ namespace Task3
 
     #endregion
 
-    #region Методы.
+    #region Методы
 
     /// <summary>
     /// Точка входа в программу.
@@ -42,29 +33,14 @@ namespace Task3
     /// <returns></returns>
     static int Main(string[] args)
     {
-      using var excelProvider = new ExcelProvider(inFileFullPath);
+      var parser = new ProductParser();
+      using var excelProvider = new ExcelProvider<Product>(inFileFullPath, parser);
+      List <Product> products = excelProvider.Read().ToList();
 
-      IEnumerable<Product> pickedProducts = excelProvider.Read()
-        .Select(row =>
-          {
-            bool isOk = ExcelStringToProductConverter.Convert(row, out Product product);
-            return new {isOk, product};
-          })
-        .Where(exProduct => exProduct.isOk && exProduct.product.Price > 2000m)
-        .Select(tuple => tuple.product)
+      IEnumerable<Product> pickedProducts = products.Where(product => product.Price > 2000m)
         .OrderBy(product => product.Name);
 
-      try
-      {
-        WriteToFile(pickedProducts, outFileFullPath);
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine("IO Error.");
-        Console.WriteLine(e);
-        return ErrorExitCode;
-      }
-
+      WriteToFile(pickedProducts, outFileFullPath);
       return 0;
     }
 
