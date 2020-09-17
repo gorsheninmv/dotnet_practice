@@ -48,6 +48,7 @@ namespace Task1
 
       return phones;
     }
+
     /// <summary>
     /// Добавить людей в контакты.
     /// </summary>
