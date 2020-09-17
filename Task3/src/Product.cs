@@ -33,7 +33,7 @@ namespace Task3
   /// <summary>
   /// Парсер товара.
   /// </summary>
-  internal class ProductParser : IParserStrategy<Product>
+  internal class ProductParser : IParser<Product>
   {
     public bool TryParse(string[] contents, out Product result)
     {

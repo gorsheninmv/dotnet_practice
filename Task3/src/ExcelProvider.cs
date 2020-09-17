@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Collections.Generic;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Task3
@@ -10,7 +6,7 @@ namespace Task3
   /// <summary>
   /// Инкапсулирует и абстрагирует работу с Excel-файлами.
   /// </summary>
-  internal sealed class ExcelProvider<T> : IDisposable
+  internal sealed class ExcelProvider<T>
   {
     #region Поля и свойства
 
@@ -20,34 +16,9 @@ namespace Task3
     private readonly string fullPath;
 
     /// <summary>
-    /// Приложение Excel.
-    /// </summary>
-    private readonly Excel.Application excelApp;
-
-    /// <summary>
-    /// Книга Excel.
-    /// </summary>
-    private readonly Excel.Workbook workbook;
-
-    /// <summary>
-    /// Страница Excel.
-    /// </summary>
-    private readonly Excel.Worksheet worksheet;
-
-    /// <summary>
-    /// Диапазон ячеек с данными.
-    /// </summary>
-    private readonly Excel.Range range;
-
-    /// <summary>
     /// Парсер.
     /// </summary>
-    private readonly IParserStrategy<T> parser;
-
-    /// <summary>
-    /// Был ли вызван метод Dispose на объекте.
-    /// </summary>
-    private bool disposed;
+    private readonly IParser<T> parser;
 
     #endregion
 
@@ -56,17 +27,38 @@ namespace Task3
     /// <summary>
     /// Читает данные из excel-файла.
     /// </summary>
-    /// <returns>Итератор по строкам.</returns>
-    /// <remarks>Ячейка excel-файла отделяется точкой запятой в выходной строке.</remarks>>
+    /// <returns>Последовательность объектов типа T.</returns>
     public IEnumerable<T> Read()
     {
-      this.ThrowIfDisposed();
+      Excel.Application? app = null;
+      Excel.Workbook? book = null;
 
-      if (!File.Exists(this.fullPath))
+      try
       {
-        throw new FileNotFoundException("File not found.", this.fullPath);
-      }
+        app = new Excel.Application();
+        book = app.Workbooks.Open(this.fullPath);
+        var worksheet = (Excel.Worksheet)book.Sheets[1];
+        Excel.Range range = worksheet.UsedRange;
 
+        IEnumerable<T> ret = this.Read(range);
+
+        foreach (var item in ret)
+          yield return item;
+      }
+      finally
+      {
+        book?.Close(0);
+        app?.Quit();
+      }
+    }
+
+    /// <summary>
+    /// Читает данные из excel-файла.
+    /// </summary>
+    /// <param name="range">Диапазон, заполненный данными.</param>
+    /// <returns>Последовательность объектов типа T.</returns>
+    private IEnumerable<T> Read(Excel.Range range)
+    {
       int rowCount = range.Rows.Count;
       int colCount = range.Columns.Count;
       var contents = new string[colCount];
@@ -88,49 +80,6 @@ namespace Task3
       }
     }
 
-    /// <summary>
-    /// Если объект уже освобожен, то бросить ObjectDisposedException.
-    /// </summary>
-    private void ThrowIfDisposed()
-    {
-      if (this.disposed)
-        throw new ObjectDisposedException(nameof(ExcelProvider<T>));
-    }
-
-    #endregion
-
-    #region IDisposable
-
-    public void Dispose()
-    {
-      this.ThrowIfDisposed();
-      this.disposed = true;
-
-      if (this.range != null)
-      {
-        Marshal.ReleaseComObject(this.range);
-      }
-
-      if (this.worksheet != null)
-      {
-        Marshal.ReleaseComObject(this.worksheet);
-      }
-
-      if (this.workbook != null)
-      {
-        this.workbook.Close(0);
-        Marshal.ReleaseComObject(this.workbook);
-      }
-
-      if (this.excelApp != null)
-      {
-        this.excelApp.Quit();
-        Marshal.ReleaseComObject(this.excelApp);
-      }
-
-      GC.SuppressFinalize(this);
-    }
-
     #endregion
 
     #region Конструкторы
@@ -139,23 +88,11 @@ namespace Task3
     /// Конструктор.
     /// </summary>
     /// <param name="fullPath">Полное имя excel-файла.</param>
-    public ExcelProvider(string fullPath, IParserStrategy<T> parser)
+    public ExcelProvider(string fullPath, IParser<T> parser)
     {
       this.fullPath = fullPath;
       this.parser = parser;
 
-      this.excelApp = new Excel.Application();
-      this.workbook = excelApp.Workbooks.Open(this.fullPath);
-      this.worksheet = (Excel.Worksheet)workbook.Sheets[1];
-      this.range = worksheet.UsedRange;
-    }
-
-    /// <summary>
-    /// Деструктор.
-    /// </summary>
-    ~ExcelProvider()
-    {
-      this.Dispose();
     }
 
     #endregion

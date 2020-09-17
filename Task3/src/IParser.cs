@@ -6,7 +6,7 @@ namespace Task3
   /// Стартегия создания объекта из строкового представления этого объекта.
   /// </summary>
   /// <typeparam name="T">Тип объекта, в который происходит преобразование.</typeparam>
-  internal interface IParserStrategy<T>
+  internal interface IParser<T>
   {
     /// <summary>
     /// Попытаться преобразовать в объект из строкового представления его полей.

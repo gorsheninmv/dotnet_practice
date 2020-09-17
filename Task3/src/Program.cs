@@ -34,7 +34,7 @@ namespace Task3
     static int Main(string[] args)
     {
       var parser = new ProductParser();
-      using var excelProvider = new ExcelProvider<Product>(inFileFullPath, parser);
+      var excelProvider = new ExcelProvider<Product>(inFileFullPath, parser);
       List <Product> products = excelProvider.Read().ToList();
 
       IEnumerable<Product> pickedProducts = products.Where(product => product.Price > 2000m)
