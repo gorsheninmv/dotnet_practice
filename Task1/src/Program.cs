@@ -38,9 +38,9 @@ namespace Task1
     {
       var phones = new MobilePhone[]
       {
-        new MobilePhone("E112C60B-5177-4FE3-A04E-899A20DE006E") {SimNumber = "1234567"},
-        new Mobile3GPhone("AA6DFD33-6FE8-4290-B3F3-D29D5C81ABA7") {SimNumber = "423454365"},
-        new MobilePhoneWithCamera("04954D21-5AAE-46D0-AB65-6B0225963BCC") {SimNumber = "856954654"},
+        new MobilePhone("E112C60B-5177-4FE3-A04E-899A20DE006E") { SimNumber = "1234567" },
+        new Mobile3GPhone("AA6DFD33-6FE8-4290-B3F3-D29D5C81ABA7") { SimNumber = "423454365" },
+        new MobilePhoneWithCamera("04954D21-5AAE-46D0-AB65-6B0225963BCC") { SimNumber = "856954654" },
       };
 
       foreach (var phone in phones)
@@ -61,6 +61,5 @@ namespace Task1
       entity = new AddressBookEntity("Petr", "Petrovich", "Ivanov", "1223456");
       addressBook.Add(entity);
     }
-
   }
 }

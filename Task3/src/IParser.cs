@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Task3
+﻿namespace Task3
 {
   /// <summary>
   /// Стартегия создания объекта из строкового представления этого объекта.

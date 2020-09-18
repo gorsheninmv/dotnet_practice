@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace Task2
@@ -26,7 +25,7 @@ namespace Task2
       if (messageBox != null)
       {
         IEnumerable<MethodInfo> messageBoxMethodsToWrite = messageBox.GetMethods(BindingFlags.Public |
-         BindingFlags.Instance);
+          BindingFlags.Instance);
 
         string fullPathToFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "MethodsInfo.txt");
         WriteMethodsMetadataToFile(fullPathToFile, messageBoxMethodsToWrite);

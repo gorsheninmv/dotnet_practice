@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Task3
 {
@@ -42,7 +41,7 @@ namespace Task3
         string name = contents[0];
         var cultureInfo = new CultureInfo("ru-RU");
 
-        bool parsed = Decimal.TryParse(contents[1], NumberStyles.Any, cultureInfo,
+        bool parsed = decimal.TryParse(contents[1], NumberStyles.Any, cultureInfo,
           out decimal price);
 
         if (parsed)
@@ -52,7 +51,7 @@ namespace Task3
         }
       }
 
-      result = new Product(String.Empty, 0m);
+      result = new Product(string.Empty, 0m);
       return false;
     }
   }

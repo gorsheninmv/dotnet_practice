@@ -22,7 +22,7 @@ namespace Task1.Phone
     /// Конструктор.
     /// </summary>
     /// <param name="imei">IMEI.</param>
-    public Mobile3GPhone(string imei) : base (imei) { }
+    public Mobile3GPhone(string imei) : base(imei) { }
 
     #endregion
   }

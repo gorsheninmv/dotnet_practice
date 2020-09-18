@@ -35,7 +35,7 @@ namespace Task3
     {
       var parser = new ProductParser();
       var excelProvider = new ExcelProvider<Product>(inFileFullPath, parser);
-      List <Product> products = excelProvider.Read().ToList();
+      List<Product> products = excelProvider.Read().ToList();
 
       IEnumerable<Product> pickedProducts = products.Where(product => product.Price > 2000m)
         .OrderBy(product => product.Name);

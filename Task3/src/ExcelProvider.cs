@@ -92,7 +92,6 @@ namespace Task3
     {
       this.fullPath = fullPath;
       this.parser = parser;
-
     }
 
     #endregion

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Task1.Phone
+﻿namespace Task1.Phone
 {
   /// <summary>
   /// Элемент адресной книги.

@@ -89,7 +89,7 @@ namespace Task1.Phone
     {
       this.Imei = imei;
       this.AddressBook = new List<AddressBookEntity>();
-      this.SimNumber = String.Empty;
+      this.SimNumber = string.Empty;
     }
 
     #endregion

@@ -12,7 +12,7 @@ namespace Task1.Phone
     /// <summary>
     /// Модуль камеры.
     /// </summary>
-    private PhotoCamera camera;
+    private readonly PhotoCamera camera;
 
     #endregion
 
