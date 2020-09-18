@@ -26,6 +26,10 @@ namespace Task1.Phone
     /// </summary>
     public event EventHandler<PhotoTakenEventArgs>? PhotoTaken;
 
+    /// <summary>
+    /// Вызов события.
+    /// </summary>
+    /// <param name="rawPhoto">Фотография в двоичных данных.</param>
     private void OnPhotoTaken(byte[] rawPhoto)
     {
       this.PhotoTaken?.Invoke(this, new PhotoTakenEventArgs(rawPhoto));

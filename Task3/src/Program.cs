@@ -31,7 +31,7 @@ namespace Task3
     /// </summary>
     /// <param name="args">Аргументы командной строки.</param>
     /// <returns></returns>
-    static int Main(string[] args)
+    private static void Main(string[] args)
     {
       var parser = new ProductParser();
       var excelProvider = new ExcelProvider<Product>(inFileFullPath, parser);
@@ -41,7 +41,6 @@ namespace Task3
         .OrderBy(product => product.Name);
 
       WriteToFile(pickedProducts, outFileFullPath);
-      return 0;
     }
 
     /// <summary>

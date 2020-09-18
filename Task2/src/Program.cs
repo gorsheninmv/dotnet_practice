@@ -14,7 +14,7 @@ namespace Task2
     /// Точка входа в программу.
     /// </summary>
     /// <param name="args">Аргументы командной строки.</param>
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
       var assemblyName = "System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
       Assembly winFormsAssembly = Assembly.Load(assemblyName);
@@ -22,12 +22,18 @@ namespace Task2
       var typeName = "System.Windows.Forms.MessageBox";
       Type? messageBox = winFormsAssembly.GetType(typeName);
 
+      string? baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+      if (baseDirectory == null)
+        throw new Exception("Base diretory not specified.");
+
+      string fullPathToFile = Path.Combine(baseDirectory, "MethodsInfo.txt");
+
       if (messageBox != null)
       {
         IEnumerable<MethodInfo> messageBoxMethodsToWrite = messageBox.GetMethods(BindingFlags.Public |
           BindingFlags.Instance);
 
-        string fullPathToFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "MethodsInfo.txt");
         WriteMethodsMetadataToFile(fullPathToFile, messageBoxMethodsToWrite);
 
         MethodInfo? messageBoxShowMethod = messageBox.GetMethod("Show", BindingFlags.Static | BindingFlags.Public,

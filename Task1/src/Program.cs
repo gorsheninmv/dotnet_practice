@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Task1.Phone;
 
 namespace Task1
@@ -20,7 +21,10 @@ namespace Task1
       foreach (var phone in phones)
       {
         phone.Connect();
-        phone.Call(phone.AddressBook[0]);
+
+        if (phone.AddressBook.Any())
+          phone.Call(phone.AddressBook.First());
+
         phone.Call("42395454359");
 
         var cameraPhone = phone as MobilePhoneWithCamera;
@@ -31,7 +35,7 @@ namespace Task1
     }
 
     /// <summary>
-    /// Создать модбильные телефоны.
+    /// Создать мобильные телефоны.
     /// </summary>
     /// <returns>Последовательность мобильных телефонов.</returns>
     private static IEnumerable<MobilePhone> GetPhones()

@@ -21,4 +21,10 @@
       <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="in.xlsx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

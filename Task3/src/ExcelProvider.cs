@@ -31,12 +31,11 @@ namespace Task3
     public IEnumerable<T> Read()
     {
       Excel.Application? app = null;
-      Excel.Workbook? book = null;
 
       try
       {
         app = new Excel.Application();
-        book = app.Workbooks.Open(this.fullPath);
+        Excel.Workbook book = app.Workbooks.Open(this.fullPath);
         var worksheet = (Excel.Worksheet)book.Sheets[1];
         Excel.Range range = worksheet.UsedRange;
 
@@ -47,7 +46,6 @@ namespace Task3
       }
       finally
       {
-        book?.Close(0);
         app?.Quit();
       }
     }
@@ -88,6 +86,7 @@ namespace Task3
     /// Конструктор.
     /// </summary>
     /// <param name="fullPath">Полное имя excel-файла.</param>
+    /// <param name="parser">Конвертер в объект типа T.</param>
     public ExcelProvider(string fullPath, IParser<T> parser)
     {
       this.fullPath = fullPath;

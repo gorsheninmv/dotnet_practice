@@ -34,6 +34,10 @@
     /// <summary>
     /// Конструктор.
     /// </summary>
+    /// <param name="firstName">Имя.</param>
+    /// <param name="lastName">Фамилия.</param>
+    /// <param name="surname">Отчество.</param>
+    /// <param name="phoneNumber">Номер телефона.</param>
     public AddressBookEntity(string firstName, string lastName, string surname, string phoneNumber)
     {
       this.FirstName = firstName;
