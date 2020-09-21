@@ -51,15 +51,13 @@ namespace Task2
     /// Записывает в файл метаданные методов.
     /// </summary>
     /// <param name="fullPath">Полное имя файла.</param>
-    /// <param name="methodInfos">Последовательность метаданных методов.</param>
-    private static void WriteMethodsMetadataToFile(string fullPath, IEnumerable<MethodInfo> methodInfos)
+    /// <param name="methodsInfo">Последовательность метаданных методов.</param>
+    private static void WriteMethodsMetadataToFile(string fullPath, IEnumerable<MethodInfo> methodsInfo)
     {
-      using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-      using var writer = new StreamWriter(stream);
-
-      foreach (var methodInfo in methodInfos)
+      using (var writer = new StreamWriter(fullPath, append: false))
       {
-        writer.WriteLine($"{methodInfo.DeclaringType?.FullName}: {methodInfo.Name}");
+        foreach (var methodInfo in methodsInfo)
+          writer.WriteLine($"{methodInfo.DeclaringType?.FullName}: {methodInfo.Name}");
       }
     }
   }
